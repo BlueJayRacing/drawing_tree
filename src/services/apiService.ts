@@ -2,9 +2,10 @@ import axios from 'axios';
 import { AxiosInstance } from 'axios';
 import { TableRow } from '../types/types';
 
+
 const API_BASE_URL = 'https://api.baserow.io/api';
-const XT20_API_TOKEN = 'saEQbzNccWX6yJgotuvOS9JETJdaYKVX';
-const XT21_API_TOKEN = 'chVcwctHRhApBDhCDHrLQSjjx17sptwV';
+const XT20_API_TOKEN = import.meta.env.VITE_XT20_API_TOKEN;
+const XT21_API_TOKEN = import.meta.env.VITE_XT21_API_TOKEN;
 
 function createApiClient(token: string) {
   return axios.create({
