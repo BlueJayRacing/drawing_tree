@@ -9,9 +9,6 @@ export function generatePartNumber(values: Partial<TableRow>, existingRows: Tabl
   }
 
   for (let i = 0; i < existingRows.length; i++) {
-    console.log(existingRows[i].inSubsystem)
-    console.log(values.inSubsystem)
-    
     if ((Number(existingRows[i].inSubsystem) == Number(values.inSubsystem) || existingRows[i].inSubsystem == values.inSubsystem) &&
         (Number(existingRows[i].inAssy) == Number(values.inAssy) || existingRows[i].inAssy == values.inAssy) &&
         (existingRows[i].Division == 0)) {
@@ -46,7 +43,7 @@ export function generateAssemblyNumber(values: Partial<TableRow>, existingRows: 
   }
 
   for (let i = 0; i < existingRows.length; i++) {
-    if ((existingRows[i].inSubsystem == values.inSubsystem || existingRows[i].inSubsystem == values.inSubsystem) && existingRows[i].Division == "0") {
+    if ((Number(existingRows[i].inSubsystem) == Number(values.inSubsystem) || existingRows[i].inSubsystem == values.inSubsystem)) {
       if (existingRows[i].inAssy >= nextInd) {
         nextInd = existingRows[i].inAssy + 1;
       }
@@ -66,5 +63,5 @@ export function generateAssemblyNumber(values: Partial<TableRow>, existingRows: 
     throw new Error("No name provided");
   }
 
-  return `${values.Car}${values.inSubsystem}${values.DocType}-${nextInd.toString().padStart(2, '0')}00`;
+  return `${values.Car}${values.inSubsystem?.toString().padStart(2, '0')}${values.DocType}-${values.Division}${nextInd.toString().padStart(2, '0')}00`;
 }

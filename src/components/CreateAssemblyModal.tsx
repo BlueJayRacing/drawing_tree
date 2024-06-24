@@ -1,13 +1,15 @@
-import React from 'react';
-import { Modal, TextInput, Select, Button, NumberInput, Switch } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
+import { Modal, TextInput, Select, Button, NumberInput, Box, Text, Alert } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { TableRow } from '../types/types';
 import { generateAssemblyNumber } from '../services/partNumberService';
+import { IconAlertCircle } from '@tabler/icons-react';
+import { ownerOptions } from '../data/ownerData';
 
 interface CreateAssemblyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateAssembly: (assembly: TableRow) => Promise<void>;
+  onCreateAssembly: (assembly: Partial<TableRow>) => Promise<void>;
   vehicle: string;
   fetchedRows: TableRow[];
 }
@@ -19,63 +21,109 @@ export const CreateAssemblyModal: React.FC<CreateAssemblyModalProps> = ({
   vehicle,
   fetchedRows,
 }) => {
+  const [assemblyNumber, setAssemblyNumber] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm({
     initialValues: {
       Car: vehicle === '20xt' ? '20' : '21',
-      DocType: '1669745', // M
-      COTSnum: '',
-      COTS: '1669811', // CUST
-      Revision: '-',
-      Owner: '1669852', // aziegle6
-      Model: '1669884', // Not Started
-      Analysis: '1669908', // Not Started
-      Drawing: '1669913', // Not Started
-      PDF: '1669918', // Not Started
-      DXF: '1669923', // Not Started
-      'Drawing Rev': '-',
-      'Order Date': new Date().toISOString().split('T')[0],
-      inSubsystem: 0,
-      inAssy: 0,
-      inIndex: 0,
-      Division: 0,
+      inSubsystem: NaN,
       Name: '',
-      'Weight(lbs)': '0.00',
-      'Assy Weight (lbs)': '0.00',
-      hideRow: false,
+      DocType: 'M',
+      COTS: 'CUST',
+      COTSnum: '',
+      Owner: 'awong69',
+      Division: 0,
     },
   });
 
+  useEffect(() => {
+    const values = form.values;
+    try {
+      const newAssemblyNumber = generateAssemblyNumber(values, fetchedRows);
+      setAssemblyNumber(newAssemblyNumber);
+      setError(null);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+      setAssemblyNumber('');
+    }
+  }, [form.values, fetchedRows]);
+
   const handleSubmit = form.onSubmit(async (values) => {
-    const assemblyNumber = generateAssemblyNumber(values, fetchedRows);
-    const newAssembly: TableRow = {
-      ...values,
-      PartNum: assemblyNumber,
-    };
-    await onCreateAssembly(newAssembly);
-    onClose();
+    try {
+      const newAssembly: Partial<TableRow> = {
+        ...values,
+        // PartNum: assemblyNumber,
+        inAssy: getNextInAssy(values.inSubsystem.toString(), fetchedRows),
+        inIndex: 0,
+        Revision: '-',
+        Model: 'Not Started',
+        Analysis: 'Not Started',
+        Drawing: 'Not Started',
+        PDF: 'Not Started',
+        DXF: 'Not Started',
+        'Drawing Rev': '-',
+        'Order Date': '1111-11-11',
+        'QTY On-car': 1,
+        hideRow: false,
+      };
+      await onCreateAssembly(newAssembly);
+      onClose();
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred while creating the assembly');
+      }
+    }
   });
 
+  const getNextInAssy = (subsystem: string, rows: TableRow[]): number => {
+    let maxAssy = 0;
+    rows.forEach(row => {
+      if (row.inSubsystem.toString() === subsystem) {
+        maxAssy = Math.max(maxAssy, row.inAssy);
+      }
+    });
+    return maxAssy + 1;
+  };
+
   return (
-    <Modal opened={isOpen} onClose={onClose} title="Create New Assembly">
+    <Modal opened={isOpen} onClose={onClose} title="Create New Assembly" size="lg">
+      {error && (
+        <Alert icon={<IconAlertCircle size="1rem" />} title="Error" color="red" mb="md">
+          {error}
+        </Alert>
+      )}
+      {assemblyNumber && (
+        <Box mb="md" p="xs" style={{ backgroundColor: '#e6f7ff', border: '1px solid #1890ff', borderRadius: '4px' }}>
+          <Text size="lg" weight={700} color="blue">Generated Assembly Number: {assemblyNumber}</Text>
+        </Box>
+      )}
       <form onSubmit={handleSubmit}>
-        <TextInput label="Name" required {...form.getInputProps('Name')} />
+        <NumberInput label="Existing Subsystem #" required {...form.getInputProps('inSubsystem')} />
+        <TextInput label="Assy Name" required {...form.getInputProps('Name')} />
         <Select
-          label="Doc Type"
+          label="Document Type"
           data={[
-            { value: '1669745', label: 'M' },
-            { value: '1669746', label: 'J' },
-            { value: '1669747', label: 'E' },
-            { value: '1669748', label: 'T' },
+            { value: 'M', label: 'M' },
+            { value: 'J', label: 'J' },
+            { value: 'E', label: 'E' },
+            { value: 'T', label: 'T' },
           ]}
           required
           {...form.getInputProps('DocType')}
         />
         <Select
-          label="COTS Type"
+          label="COTS"
           data={[
-            { value: '1669811', label: 'CUST' },
-            { value: '1669812', label: 'COTS' },
-            { value: '1669813', label: 'MODCOTS' },
+            { value: 'CUST', label: 'CUST' },
+            { value: 'COTS', label: 'COTS' },
+            { value: 'MODCOTS', label: 'MODCOTS' },
           ]}
           required
           {...form.getInputProps('COTS')}
@@ -83,19 +131,11 @@ export const CreateAssemblyModal: React.FC<CreateAssemblyModalProps> = ({
         <TextInput label="COTS #" {...form.getInputProps('COTSnum')} />
         <Select
           label="Owner"
-          data={[
-            { value: '1669852', label: 'aziegle6' },
-            { value: '1669853', label: 'znepomu1' },
-            // ... (add other options)
-          ]}
+          data={ownerOptions}
           required
           {...form.getInputProps('Owner')}
         />
-        <NumberInput label="inSubsystem" min={0} {...form.getInputProps('inSubsystem')} />
-        <TextInput label="Weight(lbs)" {...form.getInputProps('Weight(lbs)')} />
-        <TextInput label="Assy Weight (lbs)" {...form.getInputProps('Assy Weight (lbs)')} />
-        <Switch label="Hide Row" {...form.getInputProps('hideRow', { type: 'checkbox' })} />
-        <Button type="submit" mt="md">Create Assembly</Button>
+        <Button type="submit" mt="md" disabled={!!error}>Create Assembly</Button>
       </form>
     </Modal>
   );

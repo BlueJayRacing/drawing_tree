@@ -4,6 +4,7 @@ import { useForm } from '@mantine/form';
 import { TableRow } from '../types/types';
 import { generatePartNumber } from '../services/partNumberService';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { ownerOptions } from '../data/ownerData';
 
 interface CreatePartModalProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
       DocType: 'M',
       COTS: 'CUST',
       COTSnum: '',
-      Owner: 'aziegle6',
+      Owner: 'awong69',
       Material: 'N/A',
       Condition: '',
       Vendor: '',
@@ -131,11 +132,7 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
         <TextInput label="COTS #" {...form.getInputProps('COTSnum')} />
         <Select
           label="Owner"
-          data={[
-            { value: 'aziegle6', label: 'aziegle6' },
-            { value: 'znepomu1', label: 'znepomu1' },
-            // ... (add other options)
-          ]}
+          data={ownerOptions}
           required
           {...form.getInputProps('Owner')}
         />
