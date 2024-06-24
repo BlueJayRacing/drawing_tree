@@ -117,22 +117,22 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
     accessorKey: 'Order Date',
     header: 'Order Date',
   },
-  {
-    accessorKey: 'inSubsystem',
-    header: 'In Subsystem',
-  },
-  {
-    accessorKey: 'inAssy',
-    header: 'In Assy',
-  },
-  {
-    accessorKey: 'inIndex',
-    header: 'In Index',
-  },
-  {
-    accessorKey: 'Division',
-    header: 'Division',
-  },
+  // {
+  //   accessorKey: 'inSubsystem',
+  //   header: 'In Subsystem',
+  // },
+  // {
+  //   accessorKey: 'inAssy',
+  //   header: 'In Assy',
+  // },
+  // {
+  //   accessorKey: 'inIndex',
+  //   header: 'In Index',
+  // },
+  // {
+  //   accessorKey: 'Division',
+  //   header: 'Division',
+  // },
   {
     accessorKey: 'Weight(lbs)',
     header: 'Weight (lbs)',
@@ -161,10 +161,10 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
     accessorKey: 'Condition',
     header: 'Condition',
   },
-  {
-    accessorKey: 'hideRow',
-    header: 'Hide Row',
-  },
+  // {
+  //   accessorKey: 'hideRow',
+  //   header: 'Hide Row',
+  // },
   {
     accessorKey: 'Vendor',
     header: 'Vendor',
