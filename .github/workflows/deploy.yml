@@ -14,8 +14,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-22.04
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
     - uses: actions/checkout@v4
     - name: Install pnpm
@@ -41,4 +43,6 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
     - name: Output URL
-      run: echo "page_url=${{ steps.deployment.outputs.page_url }}]" >> $GITHUB_OUTPUT
+      run: |
+        echo "page_url=${{ steps.deployment.outputs.page_url }}" >> $GITHUB_OUTPUT
+        echo "The site was deployed to ${{ steps.deployment.outputs.page_url }}"
