@@ -13,14 +13,14 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
     accessorKey: 'Name',
     header: 'Name',
   },
-  {
-    accessorKey: 'Car',
-    header: 'Car',
-  },
-  {
-    accessorKey: 'Subsystem',
-    header: 'Subsystem',
-  },
+  // {
+  //   accessorKey: 'Car',
+  //   header: 'Car',
+  // },
+  // {
+  //   accessorKey: 'Subsystem',
+  //   header: 'Subsystem',
+  // },
   {
     accessorKey: 'DocType',
     header: 'Doc Type',
@@ -29,14 +29,14 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
       <StatusCell value={cell.getValue()} />
     ),
   },
-  {
-    accessorKey: 'Assy',
-    header: 'Assy',
-  },
-  {
-    accessorKey: 'Index',
-    header: 'Index',
-  },
+  // {
+  //   accessorKey: 'Assy',
+  //   header: 'Assy',
+  // },
+  // {
+  //   accessorKey: 'Index',
+  //   header: 'Index',
+  // },
   {
     accessorKey: 'COTSnum',
     header: 'COTS Num',
