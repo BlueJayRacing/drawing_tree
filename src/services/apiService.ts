@@ -7,6 +7,8 @@ const API_BASE_URL = 'https://api.baserow.io/api';
 const XT20_API_TOKEN = import.meta.env.VITE_XT20_API_TOKEN;
 const XT21_API_TOKEN = import.meta.env.VITE_XT21_API_TOKEN;
 
+console.log(XT20_API_TOKEN, XT21_API_TOKEN)
+
 function createApiClient(token: string) {
   return axios.create({
     baseURL: API_BASE_URL,
