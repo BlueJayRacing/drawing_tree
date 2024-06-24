@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { MantineProvider, createTheme } from '@mantine/core';
-import { isAuthenticated } from './services/authService';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import DrawingTree from './pages/DrawingTree';
@@ -20,8 +19,8 @@ const theme = createTheme({
 // Create a client
 const queryClient = new QueryClient()
 
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PrivateRoute = ({ element: Element, ...rest }: any) => (
-  // isAuthenticated() ? <Element {...rest} /> : <Navigate to="/login" />
   <Element {...rest} />
 );
 

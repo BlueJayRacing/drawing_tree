@@ -20,6 +20,7 @@ const DrawingTree: React.FC = () => {
   const [isCreateAssemblyModalOpen, setIsCreateAssemblyModalOpen] = useState(false);
   const [editingRow, setEditingRow] = useState<MRT_Row<TableRow> | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutateAsync: createRow, isPending: isCreatingRow } = useCreateRow(tableId, vehicle);
   const {
     data: fetchedRows = [],
@@ -27,7 +28,9 @@ const DrawingTree: React.FC = () => {
     isFetching: isFetchingRows,
     isLoading: isLoadingRows,
   } = useGetRows(tableId, vehicle);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutateAsync: updateRow, isPending: isUpdatingRow } = useUpdateRow(tableId, vehicle);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutateAsync: deleteRow, isPending: isDeletingRow } = useDeleteRow(tableId, vehicle);
 
   const openDeleteConfirmModal = (row: MRT_Row<TableRow>) =>

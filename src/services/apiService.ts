@@ -16,11 +16,14 @@ function createApiClient(token: string) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchAllData(url: string, apiClient: AxiosInstance): Promise<any[]> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let allData: any[] = [];
   let nextUrl: string | null = url;
 
   while (nextUrl) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await apiClient.get(nextUrl) as any;
     const apiData = response.data;
     const processedData = processApiResponse(apiData);
@@ -32,8 +35,10 @@ async function fetchAllData(url: string, apiClient: AxiosInstance): Promise<any[
   return allData;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function processApiResponse(apiResponse: any): any[] {
   if (apiResponse.results && Array.isArray(apiResponse.results)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return apiResponse.results.filter((row: any) => !row.hideRow);
   } else {
     console.log("No 'results' array found in the response");

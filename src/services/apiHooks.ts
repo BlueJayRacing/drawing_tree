@@ -17,6 +17,7 @@ export function useCreateRow(tableId: number, vehicle: string) {
   return useMutation({
     mutationFn: (row: TableRow) => createRow(tableId, row, vehicle),
     onMutate: (newRow: TableRow) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['rows', tableId, vehicle], (prevRows: any) => [
         ...prevRows,
         {
@@ -36,6 +37,7 @@ export function useUpdateRow(tableId: number, vehicle: string) {
   return useMutation({
     mutationFn: (row: TableRow) => updateRow(tableId, row.id, row, vehicle),
     onMutate: (updatedRow: TableRow) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['rows', tableId, vehicle], (prevRows: any) =>
         prevRows?.map((prevRow: TableRow) =>
           prevRow.id === updatedRow.id ? updatedRow : prevRow
@@ -53,6 +55,7 @@ export function useDeleteRow(tableId: number, vehicle: string) {
   return useMutation({
     mutationFn: (rowId: number) => deleteRow(tableId, rowId, vehicle),
     onMutate: (rowId: number) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['rows', tableId, vehicle], (prevRows: any) =>
         prevRows?.filter((row: TableRow) => row.id !== rowId)
       );

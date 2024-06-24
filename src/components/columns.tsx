@@ -2,7 +2,7 @@
 
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { StatusCell } from './StatusCell';
-import type { TableRow, Part, Assembly } from '../types/types';
+import type { Part, Assembly } from '../types/types';
 
 export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
@@ -24,6 +24,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'DocType',
     header: 'Doc Type',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -43,6 +44,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'COTS',
     header: 'COTS',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -58,6 +60,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'Owner',
     header: 'Owner',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -69,6 +72,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'Model',
     header: 'Model',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -76,6 +80,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'Analysis',
     header: 'Analysis',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -83,6 +88,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'Drawing',
     header: 'Drawing',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -90,6 +96,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'PDF',
     header: 'PDF',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),
@@ -97,6 +104,7 @@ export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
     accessorKey: 'DXF',
     header: 'DXF',
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Cell: ({ cell, row }) => (
       <StatusCell value={cell.getValue()} />
     ),

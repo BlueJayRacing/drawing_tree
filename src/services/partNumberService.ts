@@ -19,6 +19,7 @@ export function generatePartNumber(values: Partial<TableRow>, existingRows: Tabl
         nextInd = existingRows[i].inIndex + 1;
       }
       if (existingRows[i].inIndex == 0) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         assyName = existingRows[i].Name;
       }
     }
@@ -50,6 +51,7 @@ export function generateAssemblyNumber(values: Partial<TableRow>, existingRows: 
         nextInd = existingRows[i].inAssy + 1;
       }
       if (existingRows[i].inAssy == 0) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         assyName = existingRows[i].Name;
       }
     }

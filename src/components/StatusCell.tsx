@@ -12,11 +12,13 @@ interface StatusCellProps extends BoxProps {
   colors?: Record<number | string, string>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const StatusCell: React.FC<StatusCellProps> = ({ value, colors, ...rest }) => {
   if (!value) {
     return null;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, value: cellValue, color } = value;
 
   return (

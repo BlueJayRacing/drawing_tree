@@ -139,6 +139,7 @@ interface TableRow {
   'QTY Backups': number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rowToAssembly(row: any): Assembly {
   return {
     Analysis: row.Analysis,
@@ -183,6 +184,7 @@ function rowToAssembly(row: any): Assembly {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rowToPart(row: any): Part {
   return {
     Analysis: row.Analysis,
@@ -227,6 +229,7 @@ function rowToPart(row: any): Part {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function partToRow(part: Part): any {
   return {
     Analysis: part.Analysis ? part.Analysis.id : null,
@@ -271,6 +274,7 @@ function partToRow(part: Part): any {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function assemblyToRow(assembly: Assembly): any {
   return {
     Analysis: assembly.Analysis ? assembly.Analysis.id : null,

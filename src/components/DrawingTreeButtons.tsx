@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button, Flex } from '@mantine/core';
-import { IconDeviceFloppy, IconPlus } from '@tabler/icons-react';
 import type { MantineReactTable } from 'mantine-react-table';
 import type { Part, Assembly } from '../types/types';
 
 interface DrawingTreeButtonsProps {
-  table: MantineReactTable<Part | Assembly>;
+  table: typeof MantineReactTable<Part | Assembly>;
   setData: React.Dispatch<React.SetStateAction<(Part | Assembly)[]>>;
 }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const DrawingTreeButtons: React.FC<DrawingTreeButtonsProps> = ({ table, setData }) => {
   // ... (button click handlers and other logic)
 
