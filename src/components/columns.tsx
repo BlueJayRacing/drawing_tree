@@ -6,6 +6,10 @@ import type { Part, Assembly } from '../types/types';
 
 export const columns: MRT_ColumnDef<Part | Assembly>[] = [
   {
+    accessorKey: 'FileName',
+    header: 'File Name',
+  },
+  {
     accessorKey: 'PartNum',
     header: 'Part Number',
   },
