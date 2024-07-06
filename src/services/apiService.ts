@@ -47,12 +47,32 @@ function processApiResponse(apiResponse: any): any[] {
   }
 }
 
+// Helper function to sort the drawing tree
+function sortDrawingTree(rows: TableRow[]): TableRow[] {
+  return rows.sort((a, b) => {
+    // Sort by subsystem first
+    if (a.inSubsystem !== b.inSubsystem) {
+      return a.inSubsystem - b.inSubsystem;
+    }
+    
+    // If in the same subsystem, sort by assembly
+    if (a.inAssy !== b.inAssy) {
+      return a.inAssy - b.inAssy;
+    }
+    
+    // If in the same assembly, sort by index
+    return a.inIndex - b.inIndex;
+  });
+}
+
 export async function getRows(tableId: number, vehicle: string): Promise<TableRow[]> {
   const token = vehicle === '20xt' ? XT20_API_TOKEN : XT21_API_TOKEN;
   const apiClient = createApiClient(token);
   const url = `/database/rows/table/${tableId}/?user_field_names=true&size=200`;
   const data = await fetchAllData(url, apiClient);
-  return data as TableRow[];
+  
+  // Sort the data before returning
+  return sortDrawingTree(data as TableRow[]);
 }
 
 export async function getRow(tableId: number, rowId: number, vehicle: string): Promise<TableRow> {

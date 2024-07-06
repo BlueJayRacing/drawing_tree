@@ -8,32 +8,28 @@ interface StatusCellProps extends BoxProps {
     id: number;
     value: string;
     color: string;
-  } | null;
-  colors?: Record<number | string, string>;
+  } | null | undefined;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const StatusCell: React.FC<StatusCellProps> = ({ value, colors, ...rest }) => {
+export const StatusCell: React.FC<StatusCellProps> = React.memo(({ value, ...rest }) => {
   if (!value) {
     return null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, value: cellValue, color } = value;
+  const { value: cellValue, color } = value;
 
   return (
     <Box
       sx={{
-        padding: '4px 8px',
+        backgroundColor: color,
         borderRadius: '4px',
         color: "#fff",
-        fontWeight: 'bold',
-        textAlign: 'center',
-        backgroundColor: color,
+        padding: '4px 8px',
+        display: 'inline-block',
       }}
       {...rest}
     >
       {cellValue}
     </Box>
   );
-};
+});

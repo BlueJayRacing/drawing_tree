@@ -35,7 +35,11 @@ export function useCreateRow(tableId: number, vehicle: string) {
 export function useUpdateRow(tableId: number, vehicle: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (row: TableRow) => updateRow(tableId, row.id, row, vehicle),
+    mutationFn: (row: TableRow) => {
+      // Create a new object without the 'id' field
+      const { id, ...rowWithoutId } = row;
+      return updateRow(tableId, id, rowWithoutId, vehicle);
+    },
     onMutate: (updatedRow: TableRow) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       queryClient.setQueryData(['rows', tableId, vehicle], (prevRows: any) =>
