@@ -134,14 +134,13 @@ const DrawingTree: React.FC = () => {
       },
     });
 
-
   const table = useMantineReactTable<TableRow>({
-    columns,
+    columns: columns,
     data: tableData,
     enablePagination: false,
     enableBottomToolbar: false,
     enableEditing: true,
-    editDisplayMode: 'table',
+    editDisplayMode: 'cell',
     renderRowActions: ({ row }) => (
       <Flex gap="md">
         <Tooltip label="Delete">
@@ -162,20 +161,13 @@ const DrawingTree: React.FC = () => {
           children: 'Error loading data',
         }
       : undefined,
-    enableRowVirtualization: true,
-    enableColumnVirtualization: true,
-    columnVirtualizerOptions: {
-      overscan: 5, 
-    },
-    rowVirtualizerOptions: {
-      overscan: 10,
-    },
     mantineTableContainerProps: {
       style: {
         minHeight: '500px',
       },
     },
-    enableColumnResizing: true,
+    // enableColumnResizing: true,
+    memoMode: 'cells',
   });
 
   return (

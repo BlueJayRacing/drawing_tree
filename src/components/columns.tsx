@@ -1,5 +1,6 @@
 // columns.tsx
 
+import React from 'react';
 import { MRT_ColumnDef, MRT_Cell } from 'mantine-react-table';
 import { Select, TextInput, NumberInput } from '@mantine/core';
 import { StatusCell } from './StatusCell';
@@ -67,7 +68,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     accessorKey: 'FileName',
     header: 'File Name',
     enableEditing: false,
-    size: 400,
+    size: 450,
   },
   {
     accessorKey: 'PartNum',
