@@ -134,6 +134,16 @@ const DrawingTree: React.FC = () => {
       },
     });
 
+  const openCreateAssemblyConfirmModal = () =>
+    modals.openConfirmModal({
+      title: 'Confirm Assembly Creation',
+      children: (
+        <p>Are you sure you want to create a new assembly? This action should only be performed by authorized users.</p>
+      ),
+      labels: { confirm: 'Yes, Create Assembly', cancel: 'Cancel' },
+      onConfirm: () => setIsCreateAssemblyModalOpen(true),
+    });
+
   const table = useMantineReactTable<TableRow>({
     columns: columns,
     data: tableData,
@@ -180,7 +190,7 @@ const DrawingTree: React.FC = () => {
         <Button onClick={() => setIsCreatePartModalOpen(true)} variant="filled">
           Create Part
         </Button>
-        <Button onClick={() => setIsCreateAssemblyModalOpen(true)} variant="filled" ml="md">
+        <Button onClick={openCreateAssemblyConfirmModal} variant="filled" ml="md">
           Create Assembly
         </Button>
         <Button 

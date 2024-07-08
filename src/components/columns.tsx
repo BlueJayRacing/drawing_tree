@@ -66,15 +66,15 @@ const IndentedFileName = React.memo(({ value }: { value: string }) => {
   let indentLevel = 0;
   let fileName = value;
 
-  if (value.startsWith('....................')) {
+  if (value?.startsWith('....................')) {
     indentLevel = 3;
     fileName = value.slice(20);
-  } else if (value.startsWith('..........')) {
+  } else if (value?.startsWith('..........')) {
     indentLevel = 2;
     fileName = value.slice(10);
-  } else if (value.startsWith('.')) {
+  } else if (value?.startsWith('.')) {
     indentLevel = 1;
-    fileName = value.slice(1);
+    fileName = value?.slice(1);
   }
 
   return (
