@@ -37,15 +37,16 @@ const EditNumberInput = React.memo(({ cell, table, handleSaveCell, precision = 0
   />
 ));
 
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
 const EditSelect = React.memo(({ cell, table, options, handleSaveCell }) => (
   <Select
     data={options}
     defaultValue={cell.getValue()?.value}
     onChange={(value) => {
       handleSaveCell(cell, value);
-      table.setEditingCell(null);
+      // table.setEditingCell(null);
     }}
-    styles={{ input: { border: 'none' } }}
+    styles={{ input: { border: 'none'}, wrapper: { backgroundColor: cell.getValue()?.color } }}
   />
 ));
 
@@ -61,6 +62,33 @@ const EditDateInput = React.memo(({ cell, table, handleSaveCell }) => (
   />
 ));
 
+const IndentedFileName = React.memo(({ value }: { value: string }) => {
+  let indentLevel = 0;
+  let fileName = value;
+
+  if (value.startsWith('....................')) {
+    indentLevel = 3;
+    fileName = value.slice(20);
+  } else if (value.startsWith('..........')) {
+    indentLevel = 2;
+    fileName = value.slice(10);
+  } else if (value.startsWith('.')) {
+    indentLevel = 1;
+    fileName = value.slice(1);
+  }
+
+  return (
+    <div style={{ 
+      paddingLeft: `${indentLevel * 20}px`,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+      {fileName}
+    </div>
+  );
+});
+
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any) => void): MRT_ColumnDef<TableRow>[] => [
@@ -69,6 +97,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'File Name',
     enableEditing: false,
     size: 450,
+    Cell: ({ cell }) => <IndentedFileName value={cell.getValue<string>()} />,
   },
   {
     accessorKey: 'PartNum',

@@ -139,6 +139,7 @@ const DrawingTree: React.FC = () => {
     data: tableData,
     enablePagination: false,
     enableBottomToolbar: false,
+    enableRowActions: true,
     enableEditing: true,
     editDisplayMode: 'cell',
     renderRowActions: ({ row }) => (
@@ -163,11 +164,12 @@ const DrawingTree: React.FC = () => {
       : undefined,
     mantineTableContainerProps: {
       style: {
-        minHeight: '500px',
+        maxHeight: '75vh'
       },
     },
-    // enableColumnResizing: true,
+    enableColumnResizing: true,
     memoMode: 'cells',
+    enableStickyHeader: true,
   });
 
   return (
