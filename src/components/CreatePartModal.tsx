@@ -139,7 +139,7 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
         <TextInput label="Material" {...form.getInputProps('Material')} />
         <TextInput label="Condition" {...form.getInputProps('Condition')} />
         <TextInput label="Vendor" {...form.getInputProps('Vendor')} />
-        <NumberInput label="Total Qty" min={0} {...form.getInputProps('QTY On-car')} />
+        <NumberInput label="Qty On-Car" min={0} {...form.getInputProps('QTY On-car')} />
         <Button type="submit" mt="md" disabled={!!error}>Create Part</Button>
       </form>
     </Modal>
