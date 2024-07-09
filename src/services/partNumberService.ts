@@ -13,7 +13,7 @@ export function generatePartNumber(values: Partial<TableRow>, existingRows: Tabl
         (Number(existingRows[i].inAssy) == Number(values.inAssy) || existingRows[i].inAssy == values.inAssy) &&
         (existingRows[i].Division == 0)) {
       if (existingRows[i].inIndex >= nextInd) {
-        nextInd = existingRows[i].inIndex + 1;
+        nextInd = Number(existingRows[i].inIndex) + 1;
       }
       if (existingRows[i].inIndex == 0) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
