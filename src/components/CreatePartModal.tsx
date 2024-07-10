@@ -5,6 +5,7 @@ import { TableRow } from '../types/types';
 import { generatePartNumber } from '../services/partNumberService';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { ownerOptions } from '../data/ownerData';
+import { docTypeOptions, cotsOptions } from '../data/dropdownData';
 
 interface CreatePartModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
 }) => {
   const [partNumber, setPartNumber] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -59,10 +61,11 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
   }, [form.values, fetchedRows]);
 
   const handleSubmit = form.onSubmit(async (values) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const newPart: Partial<TableRow> = {
         ...values,
-        // PartNum: partNumber,
         inIndex: getNextInIndex(values.inSubsystem.toString(), values.inAssy.toString(), fetchedRows),
         'Order Date': '1111-11-11',
         DXF: 'Not Started',
@@ -79,6 +82,8 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
       } else {
         setError('An error occurred while creating the part');
       }
+    } finally {
+      setIsSubmitting(false);
     }
   });
 
@@ -110,22 +115,13 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
         <TextInput label="Part Name" required {...form.getInputProps('Name')} />
         <Select
           label="Doc Type"
-          data={[
-            { value: 'M', label: 'M' },
-            { value: 'J', label: 'J' },
-            { value: 'E', label: 'E' },
-            { value: 'T', label: 'T' },
-          ]}
+          data={docTypeOptions}
           required
           {...form.getInputProps('DocType')}
         />
         <Select
           label="COTS Type"
-          data={[
-            { value: 'CUST', label: 'CUST' },
-            { value: 'COTS', label: 'COTS' },
-            { value: 'MODCOTS', label: 'MODCOTS' },
-          ]}
+          data={cotsOptions}
           required
           {...form.getInputProps('COTS')}
         />
@@ -140,7 +136,14 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
         <TextInput label="Condition" {...form.getInputProps('Condition')} />
         <TextInput label="Vendor" {...form.getInputProps('Vendor')} />
         <NumberInput label="Qty On-Car" min={0} {...form.getInputProps('QTY On-car')} />
-        <Button type="submit" mt="md" disabled={!!error}>Create Part</Button>
+        <Button 
+          type="submit" 
+          mt="md" 
+          disabled={!!error || isSubmitting}
+          loading={isSubmitting}
+        >
+          {isSubmitting ? 'Creating Part...' : 'Create Part'}
+        </Button>
       </form>
     </Modal>
   );
