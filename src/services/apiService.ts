@@ -12,7 +12,6 @@ function createApiClient(token: string) {
     baseURL: API_BASE_URL,
     headers: {
       Authorization: `Token ${token}`,
-      'Content-Type': 'application/json',
     },
   });
 }
@@ -30,7 +29,11 @@ async function fetchAllData(url: string, apiClient: AxiosInstance): Promise<any[
     const processedData = processApiResponse(apiData);
 
     allData = allData.concat(processedData);
-    nextUrl = apiData.next;
+    
+    // Ensure the next URL from the API response also uses HTTPS
+    nextUrl = apiData.next ? 
+      (apiData.next.startsWith('http://') ? 'https://' + apiData.next.slice(7) : apiData.next) 
+      : null;
   }
 
   return allData;
