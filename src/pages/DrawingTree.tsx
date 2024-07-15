@@ -45,7 +45,7 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
       }
 
       // Convert Multiselect to value
-      if (['Analysis', 'COTS', 'DXF', 'Drawing', 'Model', 'PDF', 'Owner'].includes(field)) {
+      if (['Analysis', 'COTS', 'DXF', 'Drawing', 'Model', 'PDF', 'Owner', 'DocType'].includes(field)) {
         patchableRow[field as keyof TableRow] = value?.value;
       }
     }

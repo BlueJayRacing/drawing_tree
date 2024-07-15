@@ -5,12 +5,4 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   base: '/drawing_tree/',
   plugins: [react()],
-  server: {
-    // Add CORS configuration
-    cors: {
-      origin: 'https://api.baserow.io',
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-      credentials: true,
-    }
-  }
 })
