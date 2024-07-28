@@ -43,7 +43,8 @@ const EditSelect = React.memo(({ cell, table, options, handleSaveCell }) => (
     data={options}
     defaultValue={cell.getValue()?.value}
     onChange={(value) => {
-      handleSaveCell(cell, value);
+      handleSaveCell(cell, {value});
+      console.log(cell)
       // table.setEditingCell(null);
     }}
     styles={{ input: { border: 'none'}, wrapper: { backgroundColor: cell.getValue()?.color } }}
