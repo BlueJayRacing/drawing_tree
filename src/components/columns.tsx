@@ -115,6 +115,15 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Doc Type',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={docTypeOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: docTypeOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'COTSnum',
@@ -126,6 +135,15 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'COTS',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={cotsOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: cotsOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'Revision',
@@ -142,6 +160,15 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Owner',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={ownerOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: ownerOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'QTY On-car',
@@ -153,30 +180,75 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Model',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={modelOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: modelOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'Analysis',
     header: 'Analysis',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={analysisOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: analysisOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'Drawing',
     header: 'Drawing',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={drawingOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: drawingOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'PDF',
     header: 'PDF',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={pdfOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: pdfOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'DXF',
     header: 'DXF',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={dxfOptions} handleSaveCell={handleSaveCell} />,
+    filterVariant: 'multi-select',
+    mantineFilterMultiSelectProps: {
+      data: dxfOptions,
+    },
+    filterFn: (row, id, filterValues) => {
+      if (!filterValues.length) return true;
+      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
+      return filterValues.includes(cellValue);
+    },
   },
   {
     accessorKey: 'Drawing Rev',
