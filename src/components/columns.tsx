@@ -126,7 +126,7 @@ const colorMap = {
   tstanle9: '#E1ECF7',
   apivova1: '#D9EDE7',
   mdierki1: '#F7E4E2',
-  wfortne1: '#EAE3F0',
+  wfortne1: '#30AA49',
   gmatth16: '#DCE8F2',
   ebutton1: '#DBF0E6',
   vherna18: '#FCF3D9',
