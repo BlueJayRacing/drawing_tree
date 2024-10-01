@@ -115,11 +115,11 @@ interface TableRow {
   Material: string;
   Owner: number | string;
   'QTY On-car': number;
-  Model: number | string;
-  Analysis: number | string;
-  Drawing: number | string;
-  PDF: number | string;
-  DXF: number | string;
+  Model: { id: number, value: string, color: string } | null;
+  Analysis: { id: number, value: string, color: string } | null;
+  Drawing: { id: number, value: string, color: string } | null;
+  PDF: { id: number, value: string, color: string } | null;
+  DXF: { id: number, value: string, color: string } | null;
   'Drawing Rev': string;
   'Order Date': string; // Date in ISO format
   inSubsystem: number;

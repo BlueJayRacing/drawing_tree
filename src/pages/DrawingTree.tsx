@@ -20,8 +20,6 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
     'Weight', 'Condition', 'hideRow', 'Vendor', 'QTYonCar', 'AssyWeight', 'id'
   ];
 
-  const patchableRow: Partial<TableRow> = {};
-
   patchableFields.forEach(field => {
     if (field in row) {
       let value = row[field as keyof TableRow];
@@ -44,9 +42,13 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
         patchableRow[field as keyof TableRow] = value;
       }
 
-      // Convert Multiselect to value
-      if (['Analysis', 'COTS', 'DXF', 'Drawing', 'Model', 'PDF', 'Owner', 'DocType'].includes(field)) {
-        patchableRow[field as keyof TableRow] = value?.value || value;
+      // Handle complex objects (Model, Analysis, Drawing, PDF, DXF)
+      if (['Model', 'Analysis', 'Drawing', 'PDF', 'DXF'].includes(field)) {
+        if (value && typeof value === 'object' && 'id' in value) {
+          patchableRow[field as keyof TableRow] = value.id;
+        } else {
+          patchableRow[field as keyof TableRow] = value;
+        }
       }
     }
   });
@@ -90,6 +92,7 @@ const DrawingTree: React.FC = () => {
   const columns = useMemo(() => getColumns(handleSaveCell), [handleSaveCell]);
 
   const handleSaveAllChanges = useCallback(async () => {
+    setIsSaving(true);
     try {
       const updatePromises = Array.from(changedRows).map(id => {
         const row = tableData.find(r => r.id === id);
@@ -117,6 +120,8 @@ const DrawingTree: React.FC = () => {
         labels: { confirm: 'OK' },
         onConfirm: () => {},
       });
+    } finally {
+      setIsSaving(false);
     }
   }, [changedRows, tableData, updateRow]);
 
@@ -152,6 +157,7 @@ const DrawingTree: React.FC = () => {
     enableRowActions: true,
     enableEditing: true,
     editDisplayMode: 'cell',
+    initialState: {density: 'xs'},
     renderRowActions: ({ row }) => (
       <Flex gap="md">
         <Tooltip label="Delete">

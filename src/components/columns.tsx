@@ -38,18 +38,16 @@ const EditNumberInput = React.memo(({ cell, table, handleSaveCell, precision = 0
 ));
 
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EditSelect = React.memo(({ cell, table, options, handleSaveCell }) => (
+const EditSelect = ({ cell, table, options, handleSaveCell }) => (
   <Select
     data={options}
-    defaultValue={cell.getValue()?.value}
+    defaultValue={cell.getValue()?.value || cell.getValue()}
     onChange={(value) => {
-      handleSaveCell(cell, {value});
-      console.log(cell)
-      // table.setEditingCell(null);
+      handleSaveCell(cell, value);
     }}
-    styles={{ input: { border: 'none'}, wrapper: { backgroundColor: cell.getValue()?.color } }}
+    styles={{ input: { border: 'none' } }}
   />
-));
+);
 
 const EditDateInput = React.memo(({ cell, table, handleSaveCell }) => (
   <DateInput
@@ -90,15 +88,58 @@ const IndentedFileName = React.memo(({ value }: { value: string }) => {
   );
 });
 
+const ConditionalFormattedCell = ({cell}) => {
+  const value = cell.getValue();
+  const [numerator, denominator] = value.split('/').map(Number);
+  
+  let backgroundColor = 'transparent';
+  if (denominator === 0) {
+    backgroundColor = 'transparent';
+  } else if (numerator === denominator) {
+    backgroundColor = 'rgba(0, 255, 0, 0.2)'; // Light green
+  } else if (numerator < denominator) {
+    backgroundColor = 'rgba(255, 0, 0, 0.2)'; // Light red
+  } 
+
+  return (
+    <div style={{ 
+      backgroundColor, 
+      padding: '8px', 
+      borderRadius: '4px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%'
+    }}>
+      {value}
+    </div>
+  );
+};
+
+const ColoredStatusCell = ({ value }) => {
+  if (!value) return null;
+
+  return (
+    <div style={{
+      backgroundColor: value.color,
+      color: '#000000',
+      padding: '4px 8px',
+      borderRadius: '4px',
+      display: 'inline-block',
+    }}>
+      {value.value}
+    </div>
+  );
+};
+
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any) => void): MRT_ColumnDef<TableRow>[] => [
   {
     accessorKey: 'FileName',
     header: 'File Name',
-    enableEditing: false,
-    size: 450,
     Cell: ({ cell }) => <IndentedFileName value={cell.getValue<string>()} />,
+    enableEditing: false,
   },
   {
     accessorKey: 'PartNum',
@@ -115,15 +156,6 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Doc Type',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={docTypeOptions} handleSaveCell={handleSaveCell} />,
-    filterVariant: 'multi-select',
-    mantineFilterMultiSelectProps: {
-      data: docTypeOptions,
-    },
-    filterFn: (row, id, filterValues) => {
-      if (!filterValues.length) return true;
-      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
-      return filterValues.includes(cellValue);
-    },
   },
   {
     accessorKey: 'COTSnum',
@@ -135,15 +167,11 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'COTS',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={cotsOptions} handleSaveCell={handleSaveCell} />,
-    filterVariant: 'multi-select',
-    mantineFilterMultiSelectProps: {
-      data: cotsOptions,
-    },
-    filterFn: (row, id, filterValues) => {
-      if (!filterValues.length) return true;
-      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
-      return filterValues.includes(cellValue);
-    },
+  },
+  {
+    accessorKey: 'Vendor',
+    header: 'Vendor',
+    Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
     accessorKey: 'Revision',
@@ -156,23 +184,24 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
+    accessorKey: 'Condition',
+    header: 'Condition',
+    Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
+  },
+  {
     accessorKey: 'Owner',
     header: 'Owner',
     Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={ownerOptions} handleSaveCell={handleSaveCell} />,
-    filterVariant: 'multi-select',
-    mantineFilterMultiSelectProps: {
-      data: ownerOptions,
-    },
-    filterFn: (row, id, filterValues) => {
-      if (!filterValues.length) return true;
-      const cellValue = row.getValue(id)?.value ?? row.getValue(id);
-      return filterValues.includes(cellValue);
-    },
   },
   {
     accessorKey: 'QTY On-car',
     header: 'QTY On-car',
+    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
+  },
+  {
+    accessorKey: 'QTY Backups',
+    header: 'QTY Backups',
     Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
@@ -260,26 +289,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Order Date',
     Edit: ({ cell, table }) => <EditDateInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
-  {
-    accessorKey: 'inSubsystem',
-    header: 'In Subsystem',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'inAssy',
-    header: 'In Assy',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'inIndex',
-    header: 'In Index',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'Division',
-    header: 'Division',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
+  // Removed inSubsystem, inAssy, inIndex, and Division columns
   {
     accessorKey: 'Weight(lbs)',
     header: 'Weight (lbs)',
@@ -293,36 +303,25 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'QTYcomplete-A01',
     header: 'QTY Complete A01',
+    Cell: ({ cell }) => <ConditionalFormattedCell cell={cell} />,
     Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
     accessorKey: 'QTYcomplete-A02',
     header: 'QTY Complete A02',
+    Cell: ({ cell }) => <ConditionalFormattedCell cell={cell} />,
     Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
     accessorKey: 'QTYcomplete-A03',
     header: 'QTY Complete A03',
+    Cell: ({ cell }) => <ConditionalFormattedCell cell={cell} />,
     Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
     accessorKey: 'QTYcomplete-A04',
     header: 'QTY Complete A04',
+    Cell: ({ cell }) => <ConditionalFormattedCell cell={cell} />,
     Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'Condition',
-    header: 'Condition',
-    Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'Vendor',
-    header: 'Vendor',
-    Edit: ({ cell, table }) => <EditTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
-  },
-  {
-    accessorKey: 'QTY Backups',
-    header: 'QTY Backups',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
 ];
