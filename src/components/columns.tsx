@@ -116,18 +116,78 @@ const ConditionalFormattedCell = ({cell}) => {
   );
 };
 
+
+const colorMap = {
+  // Owner colors - softer gradient with varying intensities
+  aziegle6: '#E6F3F5',
+  znepomu1: '#D1E8ED',
+  awong69: '#FCEEE0',
+  shwang43: '#E6E1EF',
+  tstanle9: '#E1ECF7',
+  apivova1: '#D9EDE7',
+  mdierki1: '#F7E4E2',
+  wfortne1: '#EAE3F0',
+  gmatth16: '#DCE8F2',
+  ebutton1: '#DBF0E6',
+  vherna18: '#FCF3D9',
+  dbankos1: '#F9E4D9',
+  rcain9: '#D6EAF8',
+  jwang519: '#D1F2EB',
+  cweng8: '#FADBD8',
+  eouyang3: '#E8DAEF',
+  ktayl126: '#FFC0CB',
+  jmolony1: '#D4EFDF',
+  cpak14: '#FCF3CF',
+  hfounta2: '#FAE5D3',
+  abhojwa1: '#D6EAF8',
+  kshull3: '#D0ECE7',
+  ychen428: '#F5B7B1',
+  slihn1: '#D7BDE2',
+  snoured1: '#A9CCE3',
+  tchen128: '#A2D9CE',
+  mradwan1: '#F9E79F',
+  lboieri1: '#F5CBA7',
+  ali85: '#AED6F1',
+
+  // Status colors - softer shades
+  'Not Started': '#FFCCCB',
+  'Incomplete': '#FFE5B4',
+  'In Review': '#ADD8E6',
+  'Complete': '#90EE90',
+  'N/A': '#E0E0E0',
+
+  // COTS colors - softer shades
+  'CUST': '#B0E0E6',
+  'COTS': '#FFDAB9',
+  'MODCOTS': '#FFFACD',
+
+  // DocType colors - softer shades
+  'M': '#98FB98',
+  'J': '#AFEEEE',
+  'E': '#B0E0E6',
+  'T': '#98FB98',
+};
+
 const ColoredStatusCell = ({ value }) => {
   if (!value) return null;
 
+  const cellValue = value.value || value;
+  const backgroundColor = colorMap[cellValue] || '#DDDDDD';
+  
+  // Determine text color based on background brightness
+  const rgb = backgroundColor.match(/\w\w/g)?.map(x => parseInt(x, 16)) || [0, 0, 0];
+  const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+  const textColor = brightness > 125 ? '#000000' : '#FFFFFF';
+
   return (
     <div style={{
-      backgroundColor: value.color,
-      color: '#000000',
+      backgroundColor,
+      color: textColor,
       padding: '4px 8px',
       borderRadius: '4px',
       display: 'inline-block',
     }}>
-      {value.value}
+      {cellValue}
     </div>
   );
 };
@@ -154,7 +214,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'DocType',
     header: 'Doc Type',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={docTypeOptions} handleSaveCell={handleSaveCell} />,
   },
   {
@@ -165,7 +225,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'COTS',
     header: 'COTS',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={cotsOptions} handleSaveCell={handleSaveCell} />,
   },
   {
@@ -191,7 +251,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Owner',
     header: 'Owner',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={ownerOptions} handleSaveCell={handleSaveCell} />,
   },
   {
@@ -207,7 +267,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Model',
     header: 'Model',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={modelOptions} handleSaveCell={handleSaveCell} />,
     filterVariant: 'multi-select',
     mantineFilterMultiSelectProps: {
@@ -222,7 +282,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Analysis',
     header: 'Analysis',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={analysisOptions} handleSaveCell={handleSaveCell} />,
     filterVariant: 'multi-select',
     mantineFilterMultiSelectProps: {
@@ -237,7 +297,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Drawing',
     header: 'Drawing',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={drawingOptions} handleSaveCell={handleSaveCell} />,
     filterVariant: 'multi-select',
     mantineFilterMultiSelectProps: {
@@ -252,7 +312,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'PDF',
     header: 'PDF',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={pdfOptions} handleSaveCell={handleSaveCell} />,
     filterVariant: 'multi-select',
     mantineFilterMultiSelectProps: {
@@ -267,7 +327,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'DXF',
     header: 'DXF',
-    Cell: ({ cell }) => <StatusCell value={cell.getValue()} />,
+    Cell: ({ cell }) => <ColoredStatusCell value={cell.getValue()} />,
     Edit: ({ cell, table }) => <EditSelect cell={cell} table={table} options={dxfOptions} handleSaveCell={handleSaveCell} />,
     filterVariant: 'multi-select',
     mantineFilterMultiSelectProps: {
@@ -289,7 +349,6 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
     header: 'Order Date',
     Edit: ({ cell, table }) => <EditDateInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
-  // Removed inSubsystem, inAssy, inIndex, and Division columns
   {
     accessorKey: 'Weight(lbs)',
     header: 'Weight (lbs)',

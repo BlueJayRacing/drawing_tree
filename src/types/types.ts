@@ -127,7 +127,7 @@ interface TableRow {
   inIndex: number;
   Division: number;
   Name: string;
-  'Weight(lbs)': string; // Decimal with 2 decimal places
+  'Weight(lbs)': number; // Decimal with 2 decimal places
   'Assy Weight (lbs)': string; // Decimal with 2 decimal places
   'QTYcomplete-A01': string;
   'QTYcomplete-A02': string;

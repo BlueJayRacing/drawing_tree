@@ -100,6 +100,7 @@ export async function updateRow(tableId: number, rowId: number, data: Partial<Ta
   const apiClient = createApiClient(token);
   const url = `/database/rows/table/${tableId}/${rowId}/?user_field_names=true`;
   const response = await apiClient.patch(url, data);
+  console.log(response)
   return response.data as TableRow;
 }
 

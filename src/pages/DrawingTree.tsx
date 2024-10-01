@@ -20,35 +20,43 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
     'Weight', 'Condition', 'hideRow', 'Vendor', 'QTYonCar', 'AssyWeight', 'id'
   ];
 
+  const patchableRow: Partial<TableRow> = {};
+  
   patchableFields.forEach(field => {
-    if (field in row) {
+    if (field in row || ['TotalQTY', 'inSubsystem', 'inAssy', 'inIndex', 'Division', 'QTYonCar', "Weight"].includes(field)) {
       let value = row[field as keyof TableRow];
+      
       
       // Convert string numbers to actual numbers
       if (['TotalQTY', 'inSubsystem', 'inAssy', 'inIndex', 'Division', 'QTYonCar'].includes(field)) {
         value = Number(value);
       }
-      
       // Rename fields
-      if (field === 'QTY On-car') {
-        patchableRow['TotalQTY'] = Number(value);
-      } else if (field === 'Weight(lbs)') {
-        patchableRow['Weight'] = value;
+      if (field === 'QTYonCar') {
+        value = row['QTY On-car' as keyof TableRow]
+        patchableRow['QTY On-car'] = Number(value);
+      } else if (field === 'Weight') {
+        value = row['Weight(lbs)' as keyof TableRow]
+        patchableRow['Weight(lbs)'] = Number(value);
       } else if (field === 'Assy Weight (lbs)') {
-        patchableRow['AssyWeight'] = value;
+        patchableRow['AssyWeight'] = Number(value);
       } else if (field === 'QTY Backups') {
-        patchableRow['QTYonCar'] = Number(value);
+        patchableRow['QTY Backups'] = Number(value);
       } else {
         patchableRow[field as keyof TableRow] = value;
       }
 
       // Handle complex objects (Model, Analysis, Drawing, PDF, DXF)
-      if (['Model', 'Analysis', 'Drawing', 'PDF', 'DXF'].includes(field)) {
-        if (value && typeof value === 'object' && 'id' in value) {
-          patchableRow[field as keyof TableRow] = value.id;
-        } else {
-          patchableRow[field as keyof TableRow] = value;
-        }
+      // if (['Model', 'Analysis', 'Drawing', 'PDF', 'DXF'].includes(field)) {
+      //   if (value && typeof value === 'object' && 'id' in value) {
+      //     patchableRow[field as keyof TableRow] = value.id;
+      //   } else {
+      //     patchableRow[field as keyof TableRow] = value;
+      //   }
+      // }
+      // Convert Multiselect to value
+      if (['Analysis', 'COTS', 'DXF', 'Drawing', 'Model', 'PDF', 'Owner', 'DocType'].includes(field)) {
+        patchableRow[field as keyof TableRow] = value?.value || value;
       }
     }
   });
@@ -92,7 +100,7 @@ const DrawingTree: React.FC = () => {
   const columns = useMemo(() => getColumns(handleSaveCell), [handleSaveCell]);
 
   const handleSaveAllChanges = useCallback(async () => {
-    setIsSaving(true);
+    // setIsSaving(true);
     try {
       const updatePromises = Array.from(changedRows).map(id => {
         const row = tableData.find(r => r.id === id);
@@ -121,7 +129,7 @@ const DrawingTree: React.FC = () => {
         onConfirm: () => {},
       });
     } finally {
-      setIsSaving(false);
+      // setIsSaving(false);
     }
   }, [changedRows, tableData, updateRow]);
 
