@@ -119,8 +119,8 @@ const ConditionalFormattedCell = ({cell}) => {
 
 const colorMap = {
   // Owner colors - softer gradient with varying intensities
-  aziegle6: '#E6F3F5',
-  znepomu1: '#D1E8ED',
+  aziegle6: '#1D19AC',
+  znepomu1: '#E21B4D',
   awong69: '#FCEEE0',
   shwang43: '#E6E1EF',
   tstanle9: '#E1ECF7',
