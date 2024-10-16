@@ -168,29 +168,72 @@ const colorMap = {
   'T': '#98FB98',
 };
 
+// const ColoredStatusCell = ({ value }) => {
+//   if (!value) return null;
+
+//   const cellValue = value.value || value;
+//   const backgroundColor = colorMap[cellValue] || '#DDDDDD';
+  
+//   // Determine text color based on background brightness
+//   const rgb = backgroundColor.match(/\w\w/g)?.map(x => parseInt(x, 16)) || [0, 0, 0];
+//   const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+//   const textColor = brightness > 125 ? '#000000' : '#FFFFFF';
+
+//   return (
+//     <div style={{
+//       backgroundColor,
+//       color: textColor,
+//       padding: '4px 8px',
+//       borderRadius: '4px',
+//       display: 'inline-block',
+//     }}>
+//       {cellValue}
+//     </div>
+//   );
+// };
 const ColoredStatusCell = ({ value }) => {
   if (!value) return null;
 
   const cellValue = value.value || value;
-  const backgroundColor = colorMap[cellValue] || '#DDDDDD';
+  const isAwong69 = cellValue === 'awong69';
+  const backgroundColor = isAwong69 ? 'transparent' : (colorMap[cellValue] || '#F0F0F0');
   
   // Determine text color based on background brightness
   const rgb = backgroundColor.match(/\w\w/g)?.map(x => parseInt(x, 16)) || [0, 0, 0];
   const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-  const textColor = brightness > 125 ? '#000000' : '#FFFFFF';
+  const textColor = brightness > 186 ? '#000000' : '#FFFFFF';
+
+  const style: React.CSSProperties = {
+    backgroundColor,
+    color: textColor,
+    padding: '4px 8px',
+    borderRadius: '4px',
+    display: 'inline-block',
+    border: '1px solid #D0D0D0',
+    position: 'relative',
+    overflow: 'hidden',
+  };
 
   return (
-    <div style={{
-      backgroundColor,
-      color: textColor,
-      padding: '4px 8px',
-      borderRadius: '4px',
-      display: 'inline-block',
-    }}>
-      {cellValue}
+    <div style={style}>
+      {isAwong69 && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            animation: 'rainbow 10s linear 1s infinite',
+            zIndex: 0,
+          }}
+        />
+      )}
+      <span style={{ position: 'relative', zIndex: 1 }}>{cellValue}</span>
     </div>
   );
 };
+
 
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -352,12 +395,12 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Weight(lbs)',
     header: 'Weight (lbs)',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} precision={2} />,
+    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} precision={3} />,
   },
   {
     accessorKey: 'Assy Weight (lbs)',
     header: 'Assy Weight (lbs)',
-    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} precision={2} />,
+    Edit: ({ cell, table }) => <EditNumberInput cell={cell} table={table} handleSaveCell={handleSaveCell} precision={3} />,
   },
   {
     accessorKey: 'QTYcomplete-A01',

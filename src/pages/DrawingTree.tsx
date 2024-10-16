@@ -11,13 +11,85 @@ import { getColumns } from '../components/columns';
 import { CreatePartModal } from '../components/CreatePartModal';
 import { CreateAssemblyModal } from '../components/CreateAssemblyModal';
 
+const RainbowStyle = () => (
+  <style>
+    {`
+      @keyframes rainbow {
+        0%, 100% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 90%, 
+            #00aa00 90%, #00aa00 100%, 
+            #ff0000 100%, #ff0000 190%);
+        }
+        10% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 80%, 
+            #00aa00 80%, #00aa00 90%, 
+            #008800 90%, #008800 100%, 
+            #ff0000 100%, #ff0000 180%);
+        }
+        20% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 70%, 
+            #00aa00 70%, #00aa00 80%, 
+            #008800 80%, #008800 90%,
+            #006600 90%, #006600 100%, 
+            #ff0000 100%, #ff0000 170%);
+        }
+        30% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 60%, 
+            #00aa00 60%, #00aa00 70%, 
+            #008800 70%, #008800 80%,
+            #006600 80%, #006600 90%,
+            #004400 90%, #004400 100%, 
+            #ff0000 100%, #ff0000 160%);
+        }
+        40% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 50%, 
+            #00aa00 50%, #00aa00 60%, 
+            #008800 60%, #008800 70%,
+            #006600 70%, #006600 80%,
+            #004400 80%, #004400 90%,
+            #002200 90%, #002200 100%, 
+            #ff0000 100%, #ff0000 150%);
+        }
+        50% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 40%, 
+            #00ff00 40%, #00ff00 50%, 
+            #00dd00 50%, #00dd00 60%,
+            #00bb00 60%, #00bb00 70%,
+            #009900 70%, #009900 80%,
+            #007700 80%, #007700 90%,
+            #005500 90%, #005500 100%, 
+            #ff0000 100%, #ff0000 140%);
+        }
+        60%, 70%, 80%, 90% { 
+          background: linear-gradient(90deg, 
+            #ff0000 0%, #ff0000 30%, 
+            #ffff00 30%, #ffff00 40%, 
+            #00ff00 40%, #00ff00 50%, 
+            #00dd00 50%, #00dd00 60%,
+            #00bb00 60%, #00bb00 70%,
+            #009900 70%, #009900 80%,
+            #007700 80%, #007700 90%,
+            #005500 90%, #005500 100%, 
+            #ff0000 100%, #ff0000 130%);
+        }
+      }
+    `}
+  </style>
+);
+
 const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
   const patchableFields = [
     'Car', 'DocType', 'COTSnum', 'COTS', 'Revision', 'Material', 'Owner',
     'TotalQTY', 'Model', 'Analysis', 'Drawing', 'PDF', 'DXF', 'Drawing Rev',
     'Order Date', 'QTYcomplete-A01', 'QTYcomplete-A02', 'QTYcomplete-A03',
     'QTYcomplete-A04', 'inSubsystem', 'inAssy', 'inIndex', 'Division', 'Name',
-    'Weight', 'Condition', 'hideRow', 'Vendor', 'QTYonCar', 'AssyWeight', 'id'
+    'Weight', 'Condition', 'hideRow', 'Vendor', 'QTYonCar', 'AssyWeight', 'id', 'QTY Backups'
   ];
 
   const patchableRow: Partial<TableRow> = {};
@@ -35,9 +107,13 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
       if (field === 'QTYonCar') {
         value = row['QTY On-car' as keyof TableRow]
         patchableRow['QTY On-car'] = Number(value);
+      } else if (field === 'QTY Backups') {
+          console.log(value)
+          value = row['QTY Backups' as keyof TableRow]
+          patchableRow['QTY Backups'] = Number(value);
       } else if (field === 'Weight') {
         value = row['Weight(lbs)' as keyof TableRow]
-        patchableRow['Weight(lbs)'] = Number(value);
+        patchableRow['Weight(lbs)'] = Number(Number(value).toFixed(3));
       } else if (field === 'Assy Weight (lbs)') {
         patchableRow['AssyWeight'] = Number(value);
       } else if (field === 'QTY Backups') {
@@ -198,6 +274,7 @@ const DrawingTree: React.FC = () => {
 
   return (
     <Stack>
+      <RainbowStyle />
       <Title order={4}>{vehicle.toUpperCase()} Drawing Tree</Title>
       <MantineReactTable table={table} />
       <Flex justify="flex-end" style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', padding: '16px' }}>
