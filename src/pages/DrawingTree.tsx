@@ -4,12 +4,25 @@ import { Stack, Title, Flex, Button } from '@mantine/core';
 import { MantineReactTable, useMantineReactTable, MRT_Row, MRT_Cell } from 'mantine-react-table';
 import { useCreateRow, useGetRows, useUpdateRow, useDeleteRow } from "../services/apiHooks";
 import { IconTrash } from '@tabler/icons-react';
-import { Tooltip, ActionIcon } from '@mantine/core';
+import { Tooltip, ActionIcon, Switch } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { TableRow } from "../types/types";
 import { getColumns } from '../components/columns';
 import { CreatePartModal } from '../components/CreatePartModal';
 import { CreateAssemblyModal } from '../components/CreateAssemblyModal';
+import { calculateAssemblyWeights } from '../utils/weightCalculations';
+
+const DetectRerenders = ({ children }) => {
+  // console.log('Component rendered');
+
+  React.useEffect(() => {
+    // console.log('Component mounted or updated');
+    // return () => console.log('Component will unmount');
+  });
+
+  return <>{children}</>;
+};
+
 
 const RainbowStyle = () => (
   <style>
@@ -114,10 +127,8 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
       } else if (field === 'Weight') {
         value = row['Weight(lbs)' as keyof TableRow]
         patchableRow['Weight(lbs)'] = Number(Number(value).toFixed(3));
-      } else if (field === 'Assy Weight (lbs)') {
-        patchableRow['AssyWeight'] = Number(value);
-      } else if (field === 'QTY Backups') {
-        patchableRow['QTY Backups'] = Number(value);
+      // } else if (field === 'Assy Weight (lbs)') {
+      //   patchableRow['AssyWeight'] = Number(value);
       } else {
         patchableRow[field as keyof TableRow] = value;
       }
@@ -148,6 +159,14 @@ const DrawingTree: React.FC = () => {
   const [isCreateAssemblyModalOpen, setIsCreateAssemblyModalOpen] = useState(false);
   const [tableData, setTableData] = useState<TableRow[]>([]);
   const [changedRows, setChangedRows] = useState<Set<number>>(new Set());
+  const [enableVirtualization, setEnableVirtualization] = useState(() => {
+    const savedPreference = localStorage.getItem('enableVirtualization');
+    return savedPreference !== null ? JSON.parse(savedPreference) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('enableVirtualization', JSON.stringify(enableVirtualization));
+  }, [enableVirtualization]);
 
   const { mutateAsync: createRow } = useCreateRow(tableId, vehicle);
   const {
@@ -160,7 +179,10 @@ const DrawingTree: React.FC = () => {
   const { mutateAsync: deleteRow } = useDeleteRow(tableId, vehicle);
 
   useEffect(() => {
-    setTableData(fetchedRows);
+    if (fetchedRows.length > 0) {
+      const rowsWithCalculatedWeights = calculateAssemblyWeights(fetchedRows);
+      setTableData(rowsWithCalculatedWeights);
+    }
   }, [fetchedRows]);
 
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -182,7 +204,11 @@ const DrawingTree: React.FC = () => {
         const row = tableData.find(r => r.id === id);
         if (row) {
           const patchableRow = prepareRowForPatch(row);
-          return updateRow(patchableRow);
+        // Remove the calculated weight for assemblies before saving
+        if (row.inIndex === 0) {
+          delete patchableRow['Assy Weight (lbs)'];
+        }
+        return updateRow(patchableRow);
         }
         return Promise.resolve();
       });
@@ -270,12 +296,27 @@ const DrawingTree: React.FC = () => {
     enableColumnResizing: true,
     memoMode: 'cells',
     enableStickyHeader: true,
+    enableRowVirtualization: enableVirtualization,
+    rowVirtualizerOptions: enableVirtualization
+    ? {
+        overscan: 10,
+        estimateSize: () => 50, // Adjust based on your row height
+      }
+    : undefined,
   });
 
   return (
+    <DetectRerenders>
     <Stack>
       <RainbowStyle />
-      <Title order={4}>{vehicle.toUpperCase()} Drawing Tree</Title>
+      <Flex justify="space-between" align="center" mb="md">
+        <Title order={4}>{vehicle.toUpperCase()} Drawing Tree</Title>
+        <Switch
+          label="Enable Row Virtualization"
+          checked={enableVirtualization}
+          onChange={(event) => setEnableVirtualization(event.currentTarget.checked)}
+        />
+      </Flex>
       <MantineReactTable table={table} />
       <Flex justify="flex-end" style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', padding: '16px' }}>
         <Button onClick={() => setIsCreatePartModalOpen(true)} variant="filled">
@@ -315,7 +356,8 @@ const DrawingTree: React.FC = () => {
         fetchedRows={tableData}
       />
     </Stack>
+    </DetectRerenders>
   );
 };
 
-export default DrawingTree;
+export default React.memo(DrawingTree);

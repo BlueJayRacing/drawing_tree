@@ -137,6 +137,7 @@ interface TableRow {
   hideRow: boolean;
   Vendor: string;
   'QTY Backups': number;
+  'Calculated Assy Weight (lbs)'?: number;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
