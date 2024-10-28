@@ -4,7 +4,7 @@ import { Stack, Title, Flex, Button } from '@mantine/core';
 import { MantineReactTable, useMantineReactTable, MRT_Row, MRT_Cell } from 'mantine-react-table';
 import { useCreateRow, useGetRows, useUpdateRow, useDeleteRow } from "../services/apiHooks";
 import { IconTrash } from '@tabler/icons-react';
-import { Tooltip, ActionIcon, Switch } from '@mantine/core';
+import { Tooltip, ActionIcon, Switch, Container } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { TableRow } from "../types/types";
 import { getColumns } from '../components/columns';
@@ -306,6 +306,7 @@ const DrawingTree: React.FC = () => {
   });
 
   return (
+    <Container fluid px="xs" style={{ height: '100vh', width:'100vw', display: 'flex', flexDirection: 'column' }}>
     <DetectRerenders>
     <Stack>
       <RainbowStyle />
@@ -357,6 +358,7 @@ const DrawingTree: React.FC = () => {
       />
     </Stack>
     </DetectRerenders>
+    </Container>
   );
 };
 
