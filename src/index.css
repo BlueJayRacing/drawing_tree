@@ -65,3 +65,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.mantine-Modal-root {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 10;
+  margin: auto;
+  position: absolute;
+}
