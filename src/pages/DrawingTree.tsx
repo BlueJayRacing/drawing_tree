@@ -262,12 +262,13 @@ const DrawingTree: React.FC = () => {
   const table = useMantineReactTable<TableRow>({
     columns: columns,
     data: tableData,
+    enableColumnPinning: true,
+    initialState: { density: 'xs', columnPinning: { left: ['FileName'], right: [] } },
     enablePagination: false,
     enableBottomToolbar: false,
     enableRowActions: true,
     enableEditing: true,
     editDisplayMode: 'cell',
-    initialState: {density: 'xs'},
     renderRowActions: ({ row }) => (
       <Flex gap="md">
         <Tooltip label="Delete">

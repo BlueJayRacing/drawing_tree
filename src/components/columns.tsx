@@ -288,6 +288,7 @@ const ColoredStatusCell = ({ value }) => {
 export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any) => void): MRT_ColumnDef<TableRow>[] => [
   {
     accessorKey: 'FileName',
+    enablePinning: true,
     header: 'File Name',
     Cell: ({ cell }) => <IndentedFileName value={cell.getValue<string>()} />,
     enableEditing: false,
