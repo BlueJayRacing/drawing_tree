@@ -157,7 +157,8 @@ const ConditionalFormattedCell = ({cell}) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100%'
+      height: '100%',
+      zIndex: 0,
     }}>
       {value}
     </div>
@@ -260,6 +261,7 @@ const ColoredStatusCell = ({ value }) => {
     border: '1px solid #D0D0D0',
     position: 'relative',
     overflow: 'hidden',
+    zIndex: 0,
   };
 
   return (

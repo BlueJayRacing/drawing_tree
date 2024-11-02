@@ -12,6 +12,47 @@ import { CreatePartModal } from '../components/CreatePartModal';
 import { CreateAssemblyModal } from '../components/CreateAssemblyModal';
 import { calculateAssemblyWeights } from '../utils/weightCalculations';
 
+const getTableStyles = () => ({
+  // Add custom styles for pinned columns
+  '.mrt-table-cell[data-sticky="true"]': {
+    position: 'sticky',
+    zIndex: 2,
+    backgroundColor: 'var(--mantine-color-body)',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'inherit',
+      zIndex: -1
+    }
+  },
+  
+  // Override hover effects
+  'tr:hover td[data-sticky="true"]': {
+    backgroundColor: 'var(--mantine-color-body)',
+    '&::after': {
+      backgroundColor: 'var(--mantine-color-gray-1)'
+    }
+  },
+
+  // Handle selected rows
+  'tr[data-selected="true"] td[data-sticky="true"]': {
+    backgroundColor: 'var(--mantine-color-body)',
+    '&::after': {
+      backgroundColor: 'var(--mantine-primary-color-light)'
+    }
+  },
+
+  // Ensure proper layering
+  '.mrt-table-body': {
+    position: 'relative',
+    zIndex: 1
+  }
+});
+
 const DetectRerenders = ({ children }) => {
   // console.log('Component rendered');
 
@@ -259,6 +300,9 @@ const DrawingTree: React.FC = () => {
       onConfirm: () => setIsCreateAssemblyModalOpen(true),
     });
 
+
+  const tableStyles = getTableStyles();
+
   const table = useMantineReactTable<TableRow>({
     columns: columns,
     data: tableData,
@@ -268,6 +312,9 @@ const DrawingTree: React.FC = () => {
     enableBottomToolbar: false,
     enableRowActions: true,
     enableEditing: true,
+    mantineTableProps: {
+      style: tableStyles
+    },
     editDisplayMode: 'cell',
     renderRowActions: ({ row }) => (
       <Flex gap="md">
