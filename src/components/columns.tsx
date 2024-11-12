@@ -441,7 +441,7 @@ export const getColumns = (handleSaveCell: (cell: MRT_Cell<TableRow>, value: any
   {
     accessorKey: 'Order Date',
     header: 'Order Date',
-    Edit: ({ cell, table }) => <EditDateInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
+    Edit: ({ cell, table }) => <DebouncedTextInput cell={cell} table={table} handleSaveCell={handleSaveCell} />,
   },
   {
     accessorKey: 'Weight(lbs)',
