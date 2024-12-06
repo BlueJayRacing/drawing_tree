@@ -93,7 +93,6 @@ export const EditRowModal: React.FC<EditRowModalProps> = ({
       await onSave(updatedRow);
       onClose();
     } catch (err) {
-      console.log(err)
       if (err instanceof Error) {
         setError(err.message);
       } else {

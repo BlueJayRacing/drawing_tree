@@ -6,6 +6,7 @@ import { generatePartNumber } from '../services/partNumberService';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { ownerOptions } from '../data/ownerData';
 import { docTypeOptions, cotsOptions } from '../data/dropdownData';
+import { Console } from 'console';
 
 interface CreatePartModalProps {
   isOpen: boolean;
@@ -90,7 +91,7 @@ export const CreatePartModal: React.FC<CreatePartModalProps> = ({
   const getNextInIndex = (subsystem: string, assy: string, rows: TableRow[]): number => {
     let maxIndex = 0;
     rows.forEach(row => {
-      if (row.inSubsystem.toString() === subsystem && row.inAssy.toString() === assy) {
+      if (row.inSubsystem?.toString() === subsystem && row.inAssy?.toString() === assy) {
         maxIndex = Math.max(maxIndex, row.inIndex);
       }
     });

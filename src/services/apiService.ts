@@ -90,7 +90,7 @@ export async function createRow(tableId: number, data: TableRow, vehicle: string
   const token = vehicle === '20xt' ? XT20_API_TOKEN : XT21_API_TOKEN;
   const apiClient = createApiClient(token);
   const url = `/database/rows/table/${tableId}/?user_field_names=true`;
-  console.log(data)
+  // console.log(data)
   const response = await apiClient.post(url, data);
   return response.data as TableRow;
 }
@@ -100,7 +100,7 @@ export async function updateRow(tableId: number, rowId: number, data: Partial<Ta
   const apiClient = createApiClient(token);
   const url = `/database/rows/table/${tableId}/${rowId}/?user_field_names=true`;
   const response = await apiClient.patch(url, data);
-  console.log(response)
+  // console.log(response)
   return response.data as TableRow;
 }
 

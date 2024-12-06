@@ -3,7 +3,7 @@ import { getRows, getRow, createRow, updateRow, deleteRow, moveRow } from './api
 
 export async function getParts(tableId: number, vehicle: string): Promise<Part[]> {
   const rows = await getRows(tableId, vehicle);
-  console.log(rows)
+  // console.log(rows)
   return rows.filter((row): row is Part => !(row as Assembly).docType) as Part[];
 }
 

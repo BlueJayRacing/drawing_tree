@@ -66,7 +66,7 @@ export function calculateAssemblyWeights(rows: TableRow[]): TableRow[] {
     mainAssembly['Assy Weight (lbs)'] = totalCarWeight.toFixed(3).toString();
   }
 
-  console.log("Assembly weights calculated:", assemblyWeightMap);
-  console.log("Subsystem weights calculated:", subsystemWeightMap);
+  // console.log("Assembly weights calculated:", assemblyWeightMap);
+  // console.log("Subsystem weights calculated:", subsystemWeightMap);
   return rows;
 }

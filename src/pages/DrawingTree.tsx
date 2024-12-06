@@ -14,7 +14,7 @@ import { calculateAssemblyWeights } from '../utils/weightCalculations';
 
 const getTableStyles = () => ({
   // Add custom styles for pinned columns
-  '.mrt-table-cell[data-sticky="true"]': {
+  '.mrtTableCell[dataSticky="true"]': {
     position: 'sticky',
     zIndex: 2,
     backgroundColor: 'var(--mantine-color-body)',
@@ -31,7 +31,7 @@ const getTableStyles = () => ({
   },
   
   // Override hover effects
-  'tr:hover td[data-sticky="true"]': {
+  'tr:hover td[dataSticky="true"]': {
     backgroundColor: 'var(--mantine-color-body)',
     '&::after': {
       backgroundColor: 'var(--mantine-color-gray-1)'
@@ -39,7 +39,7 @@ const getTableStyles = () => ({
   },
 
   // Handle selected rows
-  'tr[data-selected="true"] td[data-sticky="true"]': {
+  'tr[dataSelected="true"] td[dataSticky="true"]': {
     backgroundColor: 'var(--mantine-color-body)',
     '&::after': {
       backgroundColor: 'var(--mantine-primary-color-light)'
@@ -47,7 +47,7 @@ const getTableStyles = () => ({
   },
 
   // Ensure proper layering
-  '.mrt-table-body': {
+  '.mrtTableBody': {
     position: 'relative',
     zIndex: 1
   }
