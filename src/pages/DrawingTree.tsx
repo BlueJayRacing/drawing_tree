@@ -192,6 +192,37 @@ const prepareRowForPatch = (row: TableRow): Partial<TableRow> => {
   return patchableRow;
 };
 
+const getRowColor = (row) => {
+  // Main assembly (both inAssy and inIndex are 0)
+  if (row.original.inAssy == "0" && row.original.inIndex == "0" && row.original.inSubsystem == "0") {
+    return 'rgba(186, 230, 253, 0.4)'; // Light blue for main assembly
+  }
+  
+  // System assemblies (check name for frame, drivetrain, etc)
+  if (row.original.inIndex == "0" && row.original.inAssy == "0") {
+    const name = row.original.Name.toLowerCase();
+    if (name.includes('frame')) {
+      return 'rgba(254, 202, 202, 0.4)'; // Light red for frame
+    } else if (name.includes('drivetrain')) {
+      return 'rgba(172, 167, 252, 0.4)'; // Light yellow for drivetrain
+    } else if (name.includes('suspension')) {
+      return 'rgba(247, 187, 244, 0.4)'; // Light green for suspension
+    } else if (name.includes('controls')) {
+      return 'rgba(255, 232, 183, 0.4)'; // Light indigo for controls
+    } else if (name.includes('daq')) {
+      return 'rgba(254, 240, 138, 0.4)'; // Light pink for DAQ
+    }
+  }
+  
+  // Sub-assemblies (inIndex is 0 but inAssy is not)
+  if (row.original.inIndex == "0") {
+    return 'rgba(221, 241, 225, 0.4)'; // Light green for sub-assemblies
+  }
+  
+  // Default for components
+  return 'rgba(248, 250, 252, 0.2)'; // Very light gray for components
+};
+
 const DrawingTree: React.FC = () => {
   const { vehicle = '21xt' } = useParams<{ vehicle: string }>();
   const tableId = vehicle === '20xt' ? 166656 : 305618;
@@ -341,13 +372,23 @@ const DrawingTree: React.FC = () => {
         maxHeight: '75vh'
       },
     },
+    mantineTableBodyRowProps: ({ row }) => ({
+      style: {
+        backgroundColor: getRowColor(row)
+      }
+    }),
+    mantineTableBodyCellProps: ({ row }) => ({
+      style: {
+        backgroundColor: 'transparent' // Ensure cell background is transparent to show row color
+      }
+    }),
     enableColumnResizing: true,
     memoMode: 'cells',
     enableStickyHeader: true,
     enableRowVirtualization: enableVirtualization,
     rowVirtualizerOptions: enableVirtualization
     ? {
-        overscan: 10,
+        overscan: 20,
         estimateSize: () => 50, // Adjust based on your row height
       }
     : undefined,
