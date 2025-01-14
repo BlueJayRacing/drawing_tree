@@ -200,23 +200,35 @@ const getRowColor = (row) => {
   
   // System assemblies (check name for frame, drivetrain, etc)
   if (row.original.inIndex == "0" && row.original.inAssy == "0") {
-    const name = row.original.Name.toLowerCase();
-    if (name.includes('frame')) {
-      return 'rgba(254, 202, 202, 0.4)'; // Light red for frame
-    } else if (name.includes('drivetrain')) {
-      return 'rgba(172, 167, 252, 0.4)'; // Light yellow for drivetrain
-    } else if (name.includes('suspension')) {
-      return 'rgba(247, 187, 244, 0.4)'; // Light green for suspension
-    } else if (name.includes('controls')) {
-      return 'rgba(255, 232, 183, 0.4)'; // Light indigo for controls
-    } else if (name.includes('daq')) {
-      return 'rgba(254, 240, 138, 0.4)'; // Light pink for DAQ
+    const st = row.original.Name.toLowerCase();
+    if (st.includes('frame')) {
+      return 'rgba(238, 186, 253, 0.4)';
+    } else if (st.includes('drivetrain')) {
+      return 'rgba(252, 167, 167, 0.4)';
+    } else if (st.includes('suspension')) {
+      return 'rgba(188, 173, 255, 0.4)';
+    } else if (st.includes('controls')) {
+      return 'rgba(65, 90, 66, 0.4)';
+    } else if (st.includes('daq')) {
+      return 'rgba(247, 231, 115, 0.4)';
     }
   }
   
   // Sub-assemblies (inIndex is 0 but inAssy is not)
   if (row.original.inIndex == "0") {
-    return 'rgba(221, 241, 225, 0.4)'; // Light green for sub-assemblies
+    const subsystem = row.original.inSubsystem;
+    if (subsystem == "1") {
+      return 'rgba(247, 220, 255, 0.4)'; // Frame assemblies
+    } else if (subsystem == "2") {
+      return 'rgba(211, 202, 255, 0.4)'; // Suspension assemblies
+    } else if (subsystem == "3") {
+      return 'rgba(125, 145, 125, 0.4)'; // Controls assemblies
+    } else if (subsystem == "4") {
+      return 'rgba(255, 210, 210, 0.4)'; // Drivetrain assemblies
+    } else if (subsystem == "5") {
+      return 'rgba(245, 238, 186, 0.4)'; // DAQ assemblies
+    }
+    
   }
   
   // Default for components
